@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Risk Analytics Lab</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Risk Analytics Lab</h1>
+    <p class="subtitle">Upload a CSV and flag unusual records using distance-based scoring.</p>
+
+    <div class="card">
+      <h2>1. Upload Data</h2>
+      <input type="file" id="fileInput" accept=".csv" />
+      <p id="status">No file loaded</p>
+    </div>
+
+    <div class="card">
+      <h2>2. Settings</h2>
+      <label for="threshold">Risk threshold:</label>
+      <input type="range" id="threshold" min="1" max="100" value="80" />
+      <span id="thresholdValue">80</span>
+
+      <br /><br />
+
+      <button id="analyzeBtn">Analyze</button>
+    </div>
+
+    <div class="card">
+      <h2>3. Results</h2>
+      <div id="summary">Upload a file first.</div>
+      <table id="resultsTable">
+        <thead>
+          <tr>
+            <th>Row</th>
+            <th>Risk Score</th>
+            <th>Level</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
