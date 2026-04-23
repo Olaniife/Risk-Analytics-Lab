@@ -70,6 +70,19 @@ const avgRisk =
 document.getElementById("avgRisk").textContent = avgRisk.toFixed(1);
   
   tbody.innerHTML = "";
+document.getElementById("totalRows").textContent = normalized.length;
+
+document.getElementById("highRiskCount").textContent =
+  normalized.filter(x => x.level === "High").length;
+
+document.getElementById("mediumRiskCount").textContent =
+  normalized.filter(x => x.level === "Medium").length;
+
+const avgRisk =
+  normalized.reduce((sum, x) => sum + x.risk, 0) / normalized.length;
+
+document.getElementById("avgRisk").textContent = avgRisk.toFixed(1);
+  
   normalized.slice(0, 10).forEach(item => {
 const tr = document.createElement("tr");
 
