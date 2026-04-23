@@ -56,7 +56,19 @@ if (risk >= Number(threshold.value)) level = "High";
 else if (risk >= Number(threshold.value) * 0.6) level = "Medium";
     return { row: s.row, risk, level };
   }).sort((a, b) => b.risk - a.risk);
+document.getElementById("totalRows").textContent = normalized.length;
 
+document.getElementById("highRiskCount").textContent =
+  normalized.filter(x => x.level === "High").length;
+
+document.getElementById("mediumRiskCount").textContent =
+  normalized.filter(x => x.level === "Medium").length;
+
+const avgRisk =
+  normalized.reduce((sum, x) => sum + x.risk, 0) / normalized.length;
+
+document.getElementById("avgRisk").textContent = avgRisk.toFixed(1);
+  
   tbody.innerHTML = "";
   normalized.slice(0, 10).forEach(item => {
 const tr = document.createElement("tr");
