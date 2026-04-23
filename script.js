@@ -51,18 +51,26 @@ analyzeBtn.addEventListener("click", () => {
 
   const normalized = scores.map(s => {
     const risk = Math.round((s.score / maxScore) * 100);
-    const level = risk >= Number(threshold.value) ? "High" : "Low";
+let level = "Low";
+if (risk >= Number(threshold.value)) level = "High";
+else if (risk >= Number(threshold.value) * 0.6) level = "Medium";
     return { row: s.row, risk, level };
   }).sort((a, b) => b.risk - a.risk);
 
   tbody.innerHTML = "";
   normalized.slice(0, 10).forEach(item => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${item.row}</td>
-      <td>${item.risk}</td>
-      <td>${item.level}</td>
-    `;
+ const tr = document.createElement("tr");
+tr.innerHTML = `
+  <tr style="background:${
+    item.level === "High" ? "#ffcccc" :
+    item.level === "Medium" ? "#fff3cd" :
+    "#ccffcc"
+  }">
+    <td>${item.row}</td>
+    <td>${item.risk}</td>
+    <td>${item.level}</td>
+  </tr>
+`;
     tbody.appendChild(tr);
   });
 
