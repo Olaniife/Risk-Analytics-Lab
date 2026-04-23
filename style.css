@@ -49,3 +49,27 @@ th, td {
 thead {
   background: #f0f0f0;
 }
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.metric-box {
+  background: #f8f9fb;
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.metric-box h3 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.metric-box p {
+  margin: 6px 0 0;
+  color: #555;
+}
