@@ -59,17 +59,17 @@ else if (risk >= Number(threshold.value) * 0.6) level = "Medium";
 
   tbody.innerHTML = "";
   normalized.slice(0, 10).forEach(item => {
- const tr = document.createElement("tr");
+const tr = document.createElement("tr");
+
+tr.style.background =
+  item.level === "High" ? "#ffcccc" :
+  item.level === "Medium" ? "#fff3cd" :
+  "#ccffcc";
+
 tr.innerHTML = `
-  <tr style="background:${
-    item.level === "High" ? "#ffcccc" :
-    item.level === "Medium" ? "#fff3cd" :
-    "#ccffcc"
-  }">
-    <td>${item.row}</td>
-    <td>${item.risk}</td>
-    <td>${item.level}</td>
-  </tr>
+  <td>${item.row}</td>
+  <td>${item.risk}</td>
+  <td>${item.level}</td>
 `;
     tbody.appendChild(tr);
   });
