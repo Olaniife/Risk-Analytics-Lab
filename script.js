@@ -22,6 +22,11 @@ fileInput.addEventListener("change", async (e) => {
   statusText.textContent = `Loaded: ${file.name} | Rows: ${parsedData.length}`;
   summary.textContent = "File loaded. Click Analyze.";
   tbody.innerHTML = "";
+
+  document.getElementById("totalRows").textContent = "0";
+  document.getElementById("highRiskCount").textContent = "0";
+  document.getElementById("mediumRiskCount").textContent = "0";
+  document.getElementById("avgRisk").textContent = "0";
 });
 
 analyzeBtn.addEventListener("click", () => {
@@ -31,7 +36,10 @@ analyzeBtn.addEventListener("click", () => {
   }
 
   const numericRows = parsedData
-    .map((row, index) => ({ index: index + 1, values: Object.values(row).map(Number) }))
+    .map((row, index) => ({
+      index: index + 1,
+      values: Object.values(row).map(Number)
+    }))
     .filter(r => r.values.every(v => !Number.isNaN(v)));
 
   if (!numericRows.length) {
@@ -51,55 +59,46 @@ analyzeBtn.addEventListener("click", () => {
 
   const normalized = scores.map(s => {
     const risk = Math.round((s.score / maxScore) * 100);
-let level = "Low";
-if (risk >= Number(threshold.value)) level = "High";
-else if (risk >= Number(threshold.value) * 0.6) level = "Medium";
+
+    let level = "Low";
+    if (risk >= Number(threshold.value)) {
+      level = "High";
+    } else if (risk >= Number(threshold.value) * 0.6) {
+      level = "Medium";
+    }
+
     return { row: s.row, risk, level };
   }).sort((a, b) => b.risk - a.risk);
-document.getElementById("totalRows").textContent = normalized.length;
 
-document.getElementById("highRiskCount").textContent =
-  normalized.filter(x => x.level === "High").length;
+  document.getElementById("totalRows").textContent = normalized.length;
+  document.getElementById("highRiskCount").textContent =
+    normalized.filter(x => x.level === "High").length;
+  document.getElementById("mediumRiskCount").textContent =
+    normalized.filter(x => x.level === "Medium").length;
 
-document.getElementById("mediumRiskCount").textContent =
-  normalized.filter(x => x.level === "Medium").length;
+  const avgRisk = normalized.reduce((sum, x) => sum + x.risk, 0) / normalized.length;
+  document.getElementById("avgRisk").textContent = avgRisk.toFixed(1);
 
-const avgRisk =
-  normalized.reduce((sum, x) => sum + x.risk, 0) / normalized.length;
-
-document.getElementById("avgRisk").textContent = avgRisk.toFixed(1);
-  
   tbody.innerHTML = "";
-document.getElementById("totalRows").textContent = normalized.length;
 
-document.getElementById("highRiskCount").textContent =
-  normalized.filter(x => x.level === "High").length;
-
-document.getElementById("mediumRiskCount").textContent =
-  normalized.filter(x => x.level === "Medium").length;
-
-const avgRisk =
-  normalized.reduce((sum, x) => sum + x.risk, 0) / normalized.length;
-
-document.getElementById("avgRisk").textContent = avgRisk.toFixed(1);
-  
   normalized.slice(0, 10).forEach(item => {
-const tr = document.createElement("tr");
+    const tr = document.createElement("tr");
 
-tr.style.background =
-  item.level === "High" ? "#ffcccc" :
-  item.level === "Medium" ? "#fff3cd" :
-  "#ccffcc";
+    tr.style.background =
+      item.level === "High" ? "#ffcccc" :
+      item.level === "Medium" ? "#fff3cd" :
+      "#ccffcc";
 
-tr.innerHTML = `
-  <td>${item.row}</td>
-  <td>${item.risk}</td>
-  <td>${item.level}</td>
-`;
+    tr.innerHTML = `
+      <td>${item.row}</td>
+      <td>${item.risk}</td>
+      <td>${item.level}</td>
+    `;
+
     tbody.appendChild(tr);
   });
 
-  summary.textContent = `Top 10 unusual rows shown using a simple distance-style score.`;
+  summary.textContent = "Top 10 unusual rows shown using a simple distance-style score.";
 });
 
 function parseCSV(text) {
@@ -109,7 +108,9 @@ function parseCSV(text) {
   return lines.slice(1).map(line => {
     const values = line.split(",").map(v => v.trim());
     const row = {};
-    headers.forEach((h, i) => row[h] = values[i] ?? "");
+    headers.forEach((h, i) => {
+      row[h] = values[i] ?? "";
+    });
     return row;
   });
 }
